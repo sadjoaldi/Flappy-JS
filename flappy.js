@@ -11,6 +11,13 @@ const size = [51, 36]; //taille du bird
 const jump = -11.5; //
 const cTenth = canvas.width / 10; //
 
+//pipe settings:
+const pipeWidth = 78;
+const pipeGap = 270;
+const pipeLoc = () =>
+  Math.random() * (canvas.height - (pipeGap + pipeWidth) - pipeWidth) +
+  pipeWidth;
+
 //pour créer un effet d'optique
 let index = 0,
   bestScore = 0,
@@ -18,6 +25,18 @@ let index = 0,
   pipes = [],
   flight,
   flyHeight;
+
+const setup = () => {
+  currentScore = 0;
+  flight = jump;
+  flyHeight = canvas.height / 2 + size[1] / 2;
+
+  pipes = Array(3)
+    .fill()
+    .map((a, i) => [canvas.width + i * (pipeGap + pipeWidth), pipeLoc()]);
+
+  console.log(pipes);
+};
 
 //elle permet de rendre toute l'animation
 const render = () => {
@@ -79,11 +98,14 @@ const render = () => {
     ctx.fillText(`Cliquez pour jouer`, 48, 535);
     ctx.font = "bold 30px courier";
   }
+
+  //pour afficher(display) les pipes à l'ecran:
+
   //pour faire tourner en boucle render
   window.requestAnimationFrame(render);
 };
 //pour le lancer au chargment de l'image
 img.onload = render;
-
+setup();
 document.addEventListener("click", () => (gamePlaying = true));
 window.onclick = () => (flight = jump);
