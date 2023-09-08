@@ -140,6 +140,18 @@ const render = () => {
           [pipes[pipes.length - 1][0] + pipeGap + pipeWidth, pipeLoc()],
         ];
       }
+
+      //if hit the pipe, end
+      if (
+        [
+          pipe[0] <= cTenth + size[0],
+          pipe[0] + pipeWidth >= cTenth,
+          pipe[1] > flyHeight || pipe[1] + pipeGap < flyHeight + size[1],
+        ].every((elem) => elem)
+      ) {
+        gamePlaying = false;
+        setup();
+      }
     });
   }
 
