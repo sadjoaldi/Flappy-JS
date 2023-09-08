@@ -100,7 +100,53 @@ const render = () => {
   }
 
   //pour afficher(display) les pipes à l'ecran:
+  if (gamePlaying) {
+    pipes.map((pipe) => {
+      pipe[0] -= speed;
+      //top pipe
+      ctx.drawImage(
+        img,
+        432,
+        588 - pipe[1],
+        pipeWidth,
+        pipe[1],
+        pipe[0],
+        0,
+        pipeWidth,
+        pipe[1]
+      );
 
+      //bottom pipe
+      ctx.drawImage(
+        img,
+        432 + pipeWidth,
+        108,
+        pipeWidth,
+        canvas.height - pipe[1] + pipeGap,
+        pipe[0],
+        pipe[1] + pipeGap,
+        pipeWidth,
+        canvas.height - pipe[1] + pipeGap
+      );
+
+      // condition pour regener un poteau après la disparition des autres:
+      if (pipe[0] <= -pipeWidth) {
+        currentScore++;
+        bestScore = Math.max(bestScore, currentScore);
+
+        //remove pipe + create new one
+        pipes = [
+          ...pipes.slice(1),
+          [pipes[pipes.length - 1][0] + pipeGap + pipeWidth, pipeLoc()],
+        ];
+      }
+    });
+  }
+
+  document.getElementById("bestScore").innerHTML = `Meilleur : ${bestScore}`;
+  document.getElementById(
+    "currentScore"
+  ).innerHTML = `Actuel : ${currentScore}`;
   //pour faire tourner en boucle render
   window.requestAnimationFrame(render);
 };
